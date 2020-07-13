@@ -1,8 +1,8 @@
 import java.util.Random;
 import java.util.Scanner;
-// это  залепуха  а не работа (( совсем не было времени  на  ДЗ  
+// с ИИ  не спраился
 public class Main {
-    public final static int SIZE = 5;
+    public final static int SIZE = 10;
     public final static int DOTS_TO_WIN = 4;
     public static final char DOT_EMPTY = '•';
     public static final char DOT_X = 'X';
@@ -17,8 +17,8 @@ public class Main {
         while (true) {
             humanTurn();
             printMap();
-            if (checkWin(DOT_X)) {
-                System.out.println("Вы  выиграли! ");
+            if (checkWin(DOT_X))   {
+                 System.out.println("Вы  выиграли! ");
                 break;
             }
             if (isMapFull()) {
@@ -99,19 +99,35 @@ public class Main {
         System.out.println();
     }
 
-
-    public static boolean checkWin(char symb) {
-
-        if(map[0][0] == symb && map[0][1] == symb && map[0][2] == symb && map[0][3] == symb) return true;
-        if(map[1][0] == symb && map[1][1] == symb && map[1][2] == symb && map[1][3] == symb) return true;
-        if(map[2][0] == symb && map[2][1] == symb && map[2][2] == symb && map[3][3] == symb) return true;
-        if(map[0][0] == symb && map[1][0] == symb && map[2][0] == symb && map[3][0] == symb) return true;
-        if(map[0][1] == symb && map[1][1] == symb && map[2][1] == symb && map[3][1] == symb) return true;
-        if(map[0][2] == symb && map[1][2] == symb && map[2][2] == symb && map[3][3] == symb) return true;
-        if(map[0][0] == symb && map[1][1] == symb && map[2][2] == symb && map[3][3] == symb) return true;
-        if(map[2][0] == symb && map[1][1] == symb && map[0][2] == symb && map[0][3] == symb) return true;
-        return false;
+    // ур прямой   из  http://mathportal.net/
+    public static boolean checkLine(int start_x, int start_y, int dx, int dy, char symb){
+        for (int i = 0; i < map.length - (SIZE - DOTS_TO_WIN); i++){
+            if ((map[start_x + i * dx][start_y + i * dy] != symb) )
+                return false;
         }
+        return true;
     }
 
+      public static boolean checkWin(char symb) {
+          for (int i = 0; i < map.length; i++){
+              if (checkLine(i, 0, 0, 1, symb))  return true; //строки
+              if (checkLine(0, i, 1, 0, symb))  return true; // столбцы
+          }
+          // проверяем диагонали
+          if (checkLine(0, 0, 1, 1, symb))  return true;
+          if (checkLine(0, map.length - 1, 1, -1, symb)) return true;
+          return false;
 
+
+
+//        if(map[0][0] == symb && map[0][1] == symb && map[0][2] == symb && map[0][3] == symb) return true;
+//        if(map[1][0] == symb && map[1][1] == symb && map[1][2] == symb && map[1][3] == symb) return true;
+//        if(map[2][0] == symb && map[2][1] == symb && map[2][2] == symb && map[3][3] == symb) return true;
+//        if(map[0][0] == symb && map[1][0] == symb && map[2][0] == symb && map[3][0] == symb) return true;
+//        if(map[0][1] == symb && map[1][1] == symb && map[2][1] == symb && map[3][1] == symb) return true;
+//        if(map[0][2] == symb && map[1][2] == symb && map[2][2] == symb && map[3][3] == symb) return true;
+//        if(map[0][0] == symb && map[1][1] == symb && map[2][2] == symb && map[3][3] == symb) return true;
+//        if(map[2][0] == symb && map[1][1] == symb && map[0][2] == symb && map[0][3] == symb) return true;
+//        return false;
+    }
+}
